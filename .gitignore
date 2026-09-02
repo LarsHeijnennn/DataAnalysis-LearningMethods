@@ -90,4 +90,4 @@ outputs/
 *.pfx
 credentials.json
 secrets.json
-
+secret.txt
