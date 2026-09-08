@@ -15,3 +15,4 @@
 - Document unavoidable braking, swerving, standing, interruptions, or changes in conditions.
 
 *Easily missed: riding smooth roads slowly and rough roads quickly makes speed a competing explanation for the results. Returning along the same road is another pass—not a new independent location.*
+
