@@ -1,51 +1,82 @@
-# Data understanding and preprocessing handoff
+# Data understanding and preprocessing
 
-This folder is my handoff from the data-understanding and preprocessing part of the project. The full analysis is in [version1.ipynb](../../../version1.ipynb). I went through the raw recordings, checked their quality, explored the signals, and exported a traceable copy for the rest of the group. You can use the files in [current/](current/) directly for feature engineering and modelling; there is no need to rerun the notebook first.
+This folder contains the output of my part of the project: loading the recordings, understanding the data, checking its quality, exploring the signals, and preparing a clean handoff for feature engineering and modelling. The full analysis is in [version1.ipynb](../../../version1.ipynb). The notebook can rebuild everything in [current/](current/) from the raw recordings.
 
-## What is in `current/`?
+## What `version1.ipynb` does
 
-`P01` and `P02` are the participant IDs. `R001`, `R002`, and so on are individual rides. Each ride has three sensor files: `Accelerometer.csv`, `Gyroscope.csv`, and `Gravity.csv`. I kept the streams separate because they measure different things and have different units.
+The notebook starts with one bumpy recording and inspects its accelerometer, gyroscope, and gravity streams. This gives a first look at the columns, units, value ranges, timestamps, and sampling frequency before applying the same checks to the full dataset.
 
-Start with `manifest.csv`. It tells you the participant, road label, original raw folder, device, and file path for every sensor stream. For modelling, you mainly need the manifest and the sensor files it points to. The other CSVs are evidence of the checks I did, so you can leave them alone unless you need them for the report.
+It then loads all recordings through [recording_registry.csv](../recording_registry.csv). The registry gives every ride a stable ID, so adding new data does not change the IDs of earlier rides. The notebook combines this with metadata about the participant, road label, device, and recording settings.
 
-## What I checked
+For each selected sensor file, the notebook checks:
 
-I loaded all 31 recordings, which gives 93 selected sensor files in total. I checked every stream for missing values, invalid values, duplicate rows or timestamps, timestamp order, and sampling gaps. I also compared the recordings by road label and participant using descriptive statistics and plots.
+- the expected five-column schema;
+- missing or infinite values;
+- duplicate rows and timestamps;
+- timestamps that move backwards;
+- sampling frequency and unusually large time gaps;
+- sample-count and timestamp alignment between sensors.
 
-All 93 files passed these checks. There were no missing or infinite values, duplicate rows or timestamps, or backwards time steps. The observed sampling rate was between 99.58 and 99.94 Hz, which is close to the intended 100 Hz. R020 has one fewer accelerometer sample than its gyroscope and gravity streams at the end of the recording. This is a difference of about 10 ms, rather than a missing block of data. If you combine sensor streams later, match them by timestamp instead of row number.
+The EDA compares representative smooth and bumpy rides before summarising every recording. It uses vector magnitude to compare signals without depending on one phone axis. The plots cover acceleration and rotation, participant and class differences, large peaks, and possible phone handling near the start and end of a ride.
 
-I also checked whether unusually large values looked like sensor errors or outliers. The largest acceleration peak is 40.72 m/s² in smooth recording R021 at 0.64 seconds, where phone handling is a plausible explanation. In the P01 recordings, the bumpy rides show higher and more sustained acceleration variation than the smooth rides. The gyroscope values overlap more. P02 only has smooth rides, so it cannot provide a clean comparison between the road labels. These observations are useful for later feature engineering, but they are not enough to justify deleting individual values.
+The final sections record the preprocessing decision, repeat the quality checks on the prepared copies, and write the processed files. Each saved CSV is loaded again and compared with its in-memory source. The notebook also checks that the folders in `current/` match the manifest, which prevents old generated files from remaining unnoticed.
 
-## What I changed
+## Main findings
 
-The files did not have structural problems that needed correction. I therefore kept all samples and did not filter, clip, resample, scale, or impute anything. I calculated magnitudes only for exploration, and they are not included in the exported files. Windowing is also not done here; that belongs with feature engineering and modelling.
+The dataset contains 41 recordings and 123 selected sensor files. There are 22 bumpy and 19 smooth rides. P01 contributes 12 bumpy and 7 smooth recordings, while P02 contributes 10 bumpy and 12 smooth recordings.
 
-The beginning or end of a recording includes phone handling. I compared fixed five-second start and end segments with the middle of each ride to inspect this. The plots show that movement is often stronger at an edge than in the middle, especially for the accelerometer and gyroscope. That is consistent with handling the phone or stopping, but it does not prove that every edge sample is contaminated. The available annotation files do not say when cycling starts or stops, so I could not turn that diagnostic into a reliable cropping rule. Cutting parts of a ride by eye would have been arbitrary. I therefore kept the 31 complete recordings as they are. The export contains 142,536 accelerometer samples, 142,537 gyroscope samples, and 142,537 gravity samples.
+All 123 files pass the structural checks. I found no missing or infinite values, duplicate rows, duplicate timestamps, or non-positive time steps. The observed sampling frequency ranges from 99.58 to 99.94 Hz, close to the intended 100 Hz. R020 has one fewer accelerometer sample than gyroscope and gravity samples at the end. The difference is about 10 ms. Sensor streams should therefore be combined by timestamp instead of row number.
+
+The largest acceleration peak is 40.72 m/s² in smooth recording R021 at 0.64 seconds. This happens near the start of the recording, where phone handling is a plausible explanation. Within P02, the median acceleration-magnitude standard deviation is 2.128 m/s² for bumpy rides and 1.581 m/s² for smooth rides. The gyroscope summaries overlap more. The ten bumpy rides share a route and recording session, which may explain part of the acceleration difference.
+
+Movement is often stronger near the recording edges. The annotation files do not contain cycling start and stop times, so the sensor data cannot show exactly where phone handling ends and cycling begins.
+
+## Preprocessing decision
+
+The files have no structural problems that require correction. I kept every sample and did not filter, clip, resample, scale, or impute the signals. Magnitude is calculated only for EDA and is not saved as an extra feature.
+
+I also kept the complete start and end of every recording. Choosing cutoffs by eye would be difficult to reproduce and could remove genuine road movement. Windowing and any rule for excluding edge windows belong to the feature-engineering stage.
+
+The processed export contains 192,366 accelerometer samples, 192,367 gyroscope samples, and 192,367 gravity samples.
+
+## Collection setup and limitations
+
+All recordings followed the same collection protocol. The phone was face down in a tight right trouser pocket, cycling speed was constant, and the same gear was used where applicable.
+
+Both participants recorded both road labels, which gives each phone model examples of smooth and bumpy roads. Device still identifies the participant because P01 used an iPhone 17 Pro and P02 used an iPhone 13 Pro.
+
+Brian recorded all ten new bumpy rides on the Kruisstraat route during one short session. A random split could place very similar conditions in both training and evaluation data. Windows from one ride must stay in the same split. A route- or session-grouped sensitivity check would also be useful once reliable group labels are available.
+
+The separate deployment recording is not used in this notebook.
 
 ## How this relates to the course
 
-The [September 4 lecture](../../../course_files/lecture_files/5ARE0-Lecture-20260904.pdf) discusses keeping raw measurements, checking sampling, and deciding how to condition data. That is why I inspected the raw streams before applying any preprocessing. The same lecture covers missing values, but there were none here, so imputation was unnecessary.
+The [September 4 lecture](../../../course_files/lecture_files/5ARE0-Lecture-20260904.pdf) covers raw measurements, sampling, missing values, and decisions about conditioning data. These topics guide the structural checks and the decision to leave valid samples unchanged.
 
-The [September 8 lecture](../../../course_files/lecture_files/5ARE0-Lecture-20260908.pdf) introduces combining measurements into features and extracting characteristics over time windows. I used vector magnitude only as an EDA view of the three axes. Creating windows and choosing model features come after this handoff.
+The [September 8 lecture](../../../course_files/lecture_files/5ARE0-Lecture-20260908.pdf) introduces combinations such as vector magnitude and features calculated over time windows. This notebook uses magnitude for exploration. Windowing and feature calculation come after this handoff.
 
-The [assignment instructions](../../../course_files/assignment/Assignment12026.pdf) ask us to keep raw and processed data separate, use consistent labels and timestamps, and document the data-management choices. This export does that while leaving the raw recordings unchanged.
+The [assignment instructions](../../../course_files/assignment/Assignment12026.pdf) require separate raw and processed data, consistent labels and timestamps, documented preprocessing choices, and reproducible code. The notebook follows this structure and leaves the raw files unchanged.
 
-## Files to use
+## Processed files
 
-Inside `current/`:
+`P01` and `P02` are participant IDs. `R001`, `R002`, and so on are individual rides. Every processed ride has separate accelerometer, gyroscope, and gravity files because the sensors measure different quantities and use different units.
+
+Start with `manifest.csv`. It links each processed file to its recording ID, participant, class, raw folder, device, sample count, and unit.
 
 | File | Contents |
 |---|---|
-| `manifest.csv` | The main index for the exported data |
-| `P01/R001/Accelerometer.csv`, etc. | The three complete sensor streams for each ride |
-| `preprocessing_log.csv` | Input and output sample counts for each stream |
-| `quality_raw.csv` / `quality_validated.csv` | Results of the structural checks before and after exporting |
+| `../recording_registry.csv` | Stable mapping from recording IDs to raw folders |
+| `manifest.csv` | Main index for the processed data |
+| `P01/R001/Accelerometer.csv`, etc. | Complete sensor streams for each ride |
+| `preprocessing_log.csv` | Input and output sample counts for every stream |
+| `quality_raw.csv` | Structural checks on the raw streams |
+| `quality_validated.csv` | The same checks after preparation |
 
-Sensor files keep `time`, `seconds_elapsed`, `z`, `y`, and `x`. `time` is a Unix timestamp in nanoseconds, while `seconds_elapsed` is measured from the start of the original recording. Acceleration and gravity use m/s²; gyroscope values use rad/s.
+Sensor files keep `time`, `seconds_elapsed`, `z`, `y`, and `x`. `time` is a Unix timestamp in nanoseconds. `seconds_elapsed` starts at the beginning of the original recording. Acceleration and gravity use m/s², while gyroscope values use rad/s.
 
-## How to load the data
+## Loading the processed data
 
-Run this from a notebook in the `Assignment 1` folder. Change the path if you copied the data somewhere else.
+Run this from a notebook in the `Assignment 1` folder. Change the path if the data was copied somewhere else.
 
 ```python
 from pathlib import Path
@@ -67,18 +98,16 @@ example = recordings[("R001", "Accelerometer")]
 example.head()
 ```
 
-These files contain time series, not windows or a feature table. Keep the recordings separate. If you combine sensor streams, use timestamps instead of assuming that the same row number means the same moment in time.
+These files contain complete time series. They do not contain windows or a feature table. Keep each ride separate and match sensor measurements by timestamp when streams are combined.
 
-## What still needs to happen
+## Next step
 
-The next step is windowing, feature engineering, feature selection, and supervised modelling. Keep the IDs for splitting and tracing the results, but do not use them as model features. Windows from one ride should stay in the same data split. Any scaling should be fitted on the training set only.
+My part ends with this processed and documented handoff. The next stage is windowing, feature engineering, feature selection, and supervised modelling. Recording IDs are useful for splitting and tracing results, but they must not become model features. Fit any scaling or balancing method on the training data only.
 
-Phone handling near the edges of a recording may still add noise. If you decide to remove windows later, use a clear rule and decide it without looking at validation or test results.
-
-There is an important limitation in the data: P01 has 12 bumpy and 7 smooth recordings, while P02 has 12 smooth recordings and no bumpy recordings. The participants also used different phones. A model could therefore learn differences between participants or devices instead of differences in road quality. Routes, phone placement, and speed may also affect the measurements. The separate deployment dataset has not been used here.
+Phone handling near the edges may still add noise. If edge windows are removed later, the rule should be set before evaluating the models and applied consistently to all recordings.
 
 ## Rebuilding the files
 
-Open `version1.ipynb` and run it from a fresh kernel. The package versions are printed in the setup section. The notebook rewrites the generated files in `current/` and leaves the raw recordings untouched.
+Open `version1.ipynb` and run it from a fresh kernel. The setup section prints the package versions. The notebook reads stable IDs from `recording_registry.csv`, rebuilds `current/`, and stops if the registry and raw folders do not match.
 
-The manifest links each processed ID to its original raw folder. The participant IDs only organise the processed export; they do not anonymise the raw files.
+The participant IDs organise the processed export. They do not anonymise the names used in the raw folders.
