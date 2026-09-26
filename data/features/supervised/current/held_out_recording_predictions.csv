@@ -1,0 +1,9 @@
+recording_id,road_class,predicted_class
+R001,bumpy,bumpy
+R003,bumpy,bumpy
+R008,bumpy,bumpy
+R009,bumpy,bumpy
+R014,smooth,smooth
+R024,smooth,smooth
+R029,smooth,smooth
+R032,bumpy,bumpy
