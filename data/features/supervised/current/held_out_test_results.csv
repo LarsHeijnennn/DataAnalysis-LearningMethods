@@ -1,0 +1,2 @@
+selected_model,test_accuracy,test_f1_macro,train_recordings,test_recordings,train_windows,test_windows
+Random forest,0.9558823529411765,0.952146375791696,33,8,573,136

@@ -49,6 +49,7 @@ ENV/
 .env
 .env.*
 !.env.example
+DataAnalysis/
 
 # Jupyter
 .ipynb_checkpoints/
