@@ -1,0 +1,4 @@
+sensor,source_samples,aligned_samples,samples_excluded_by_join
+Accelerometer,101926,101926,0
+Gravity,101926,101926,0
+Gyroscope,101926,101926,0

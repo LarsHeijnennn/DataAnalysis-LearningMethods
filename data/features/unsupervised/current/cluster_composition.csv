@@ -1,0 +1,10 @@
+model,cluster,windows,recordings,bumpy,smooth,P01,P02,boundary,interior
+K-means,0,509,33,260,249,210,299,68,441
+K-means,1,64,33,33,31,35,29,64,0
+Agglomerative clustering,0,511,33,261,250,212,299,70,441
+Agglomerative clustering,1,62,33,32,30,33,29,62,0
+DBSCAN,-1,28,23,14,14,18,10,28,0
+DBSCAN,0,512,33,262,250,212,300,71,441
+DBSCAN,1,33,33,17,16,15,18,33,0
+Gaussian mixture model,0,235,33,155,80,170,65,115,120
+Gaussian mixture model,1,338,24,138,200,75,263,17,321

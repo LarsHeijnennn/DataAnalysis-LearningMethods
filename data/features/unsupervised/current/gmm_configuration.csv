@@ -1,0 +1,4 @@
+covariance_type,bic,converged,iterations
+full,36482.61262512176,True,11
+diag,40059.04605078773,True,11
+tied,43656.55240912059,True,3

@@ -1,0 +1,4 @@
+model,prediction_ms_per_window
+Logistic regression,0.0010516615181711923
+K-means,0.0014994655319092954
+Gaussian mixture model,0.0011218549732653583

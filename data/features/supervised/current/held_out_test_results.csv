@@ -1,2 +1,2 @@
-selected_model,selected_parameters,test_accuracy,test_f1_macro,test_recording_accuracy,test_recording_f1_macro,train_recordings,test_recordings,train_windows,test_windows
-Random forest,"{""model__max_features"": ""sqrt"", ""model__min_samples_leaf"": 5, ""model__n_estimators"": 200, ""target_select__k"": ""all""}",0.9632352941176471,0.959941089837997,1.0,1.0,33,8,573,136
+selected_model,selected_parameters,test_accuracy,test_f1_macro,test_recording_accuracy,test_recording_f1_macro,train_recordings,test_recordings,train_windows,test_windows,baseline_test_accuracy,baseline_test_f1_macro
+Logistic regression,"{""model__C"": 10.0, ""target_select__k"": ""all""}",0.9485294117647058,0.9433838834374071,1.0,1.0,33,8,573,136,0.6544117647058824,0.39555555555555555

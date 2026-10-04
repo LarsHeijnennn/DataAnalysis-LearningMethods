@@ -1,0 +1,3 @@
+windows,validation_windows,cv_f1_macro
+All training windows,573,0.9546653355319721
+Interior training windows,441,0.9886929370930593

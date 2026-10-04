@@ -1,2 +1,2 @@
-approach,selected_model,reason
-Supervised,Random forest,Selected by Part 2 grouped cross-validation; held-out rides provide the final evaluation. It can predict new windows.
+approach,selected_model,selection_metric,reason
+Supervised,Logistic regression,training grouped CV macro F1,Highest mean CV macro F1 among the declared predictive candidates.

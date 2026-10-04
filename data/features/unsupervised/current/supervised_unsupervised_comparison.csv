@@ -1,3 +1,5 @@
-approach,model,score,metric,evaluation_data,purpose
-Supervised,Random forest,0.9632352941176472,held-out classification accuracy,held-out rides from Part 2,predict a road class for a new window
-Unsupervised,K-means,0.6561954624781849,exploratory agreement over all training windows,training rides after clustering,explore whether natural groups resemble the road classes
+model,cv_accuracy_mean,cv_f1_macro_mean,cv_f1_macro_std,approach,test_accuracy,test_f1_macro,test_recording_accuracy,test_recording_f1_macro
+Logistic regression,0.954737864271723,0.9546653355319721,0.006916468072721977,Supervised,0.9485294117647058,0.9433838834374071,1.0,1.0
+Gaussian mixture model,0.6397892320812291,0.6334595467776427,0.04718250055195282,Cluster-to-road,0.47794117647058826,0.47768702331367985,0.375,0.2727272727272727
+K-means,0.5448202459791864,0.41450113920242904,0.1519819364133563,Cluster-to-road,0.6544117647058824,0.39555555555555555,0.625,0.38461538461538464
+Majority baseline,0.5108916745506149,0.33807437217410247,0.007524588935738033,Baseline,0.6544117647058824,0.39555555555555555,0.625,0.38461538461538464
