@@ -1,0 +1,2 @@
+approach,selected_model,reason
+Supervised,Random forest,Selected by Part 2 grouped cross-validation; held-out rides provide the final evaluation. It can predict new windows.

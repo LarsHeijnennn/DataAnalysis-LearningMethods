@@ -1,0 +1,3 @@
+approach,model,score,metric,evaluation_data,purpose
+Supervised,Random forest,0.9632352941176472,held-out classification accuracy,held-out rides from Part 2,predict a road class for a new window
+Unsupervised,K-means,0.6561954624781849,exploratory agreement over all training windows,training rides after clustering,explore whether natural groups resemble the road classes

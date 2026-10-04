@@ -1,2 +1,2 @@
 selected_model,selected_parameters,test_accuracy,test_f1_macro,test_recording_accuracy,test_recording_f1_macro,train_recordings,test_recordings,train_windows,test_windows
-Logistic regression,"{""model__C"": 0.1, ""target_select__k"": 40}",0.9708029197080292,0.9694332887103971,1.0,1.0,33,8,572,137
+Random forest,"{""model__max_features"": ""sqrt"", ""model__min_samples_leaf"": 5, ""model__n_estimators"": 200, ""target_select__k"": ""all""}",0.9632352941176471,0.959941089837997,1.0,1.0,33,8,573,136

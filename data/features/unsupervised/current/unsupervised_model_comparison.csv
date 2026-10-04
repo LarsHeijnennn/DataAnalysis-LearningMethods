@@ -1,0 +1,5 @@
+model,cluster_agreement_accuracy,assigned_cluster_agreement,number_of_clusters,noise_fraction,assigned_windows,total_windows
+K-means,0.6561954624781849,0.6561954624781849,2,0.0,573,573
+Gaussian mixture model,0.6195462478184991,0.6195462478184991,2,0.0,573,573
+DBSCAN,0.5322862129144852,1.0,11,0.4677137870855148,305,573
+Agglomerative clustering,0.5113438045375218,0.5113438045375218,2,0.0,573,573
