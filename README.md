@@ -94,9 +94,11 @@ The notebook creates 709 overlapping windows of 500 samples (approximately five 
 
 ### Participant identifiers and privacy
 
-Processed outputs identify participants as P01/P02. The working raw folders and registry still contain participant names, and `Metadata.csv` includes device names and device IDs. This means the working dataset is not fully anonymized.
+Raw participant folders use P01/P02, recording folders use stable R### IDs, and the registry and generated manifest use matching paths. Persistent device IDs in `Metadata.csv` are replaced with Device01/Device02. Phone model names are retained for interpreting device differences.
 
-The loader also accepts an anonymized copy with P01/P02 participant folders, stable R### recording folders and matching registry paths. Generated manifests and notebook tables keep the source paths from that copy. A shared copy also needs anonymized values in any identifying metadata fields.
+Saved notebook output paths were updated directly for this identifier cleanup without rerunning the analysis. Sensor measurements, timestamps, model results, figures and execution counts are unchanged. Required author names and student numbers remain on the notebook title page. Dates and general collection locations remain documented for interpreting the study; the identifiers have been pseudonymized rather than making the data impossible to re-identify.
+
+Historical archives, Git history and local backups may retain original identifiers and must not be included in the submission ZIP. Use only the submission inputs listed above.
 
 ## Generated outputs
 
